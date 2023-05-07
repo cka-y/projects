@@ -27,4 +27,5 @@ def display_value(value):
 
 
 if __name__ == '__main__':
+    os.system("make")
     app.run_server(debug=True)
