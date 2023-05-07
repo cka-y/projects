@@ -22,10 +22,10 @@ app.layout = html.Div([
 @app.callback(Output('display-value', 'children'),
               [Input('dropdown', 'value')])
 def display_value(value):
+    result = subprocess.run(['make'], stdout=subprocess.PIPE)
     output = subprocess.check_output("ls", shell=True)
-    return f'You have selected {value} - {output.decode()} - {os.name}'
+    return f'You have selected {value} - {output.decode()} - {os.name} - {result}'
 
 
 if __name__ == '__main__':
-    os.system("make")
     app.run_server(debug=True)
