@@ -22,8 +22,8 @@ app.layout = html.Div([
 @app.callback(Output('display-value', 'children'),
               [Input('dropdown', 'value')])
 def display_value(value):
-    output = subprocess.check_output("whoami", shell=True)
-    return f'You have selected {value} - {output} - {os.name}'
+    output = subprocess.check_output("ls", shell=True)
+    return f'You have selected {value} - {output.decode()} - {os.name}'
 
 
 if __name__ == '__main__':
