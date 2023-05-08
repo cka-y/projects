@@ -1,1 +1,1 @@
-web: gunicorn app:server
+web: make && gunicorn app:server
