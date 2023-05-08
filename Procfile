@@ -1,1 +1,1 @@
-web: make && gunicorn --worker-class eventlet app:app
+web: make && gunicorn --workers 4 --worker-class uvicorn.workers.UvicornWorker app:app
