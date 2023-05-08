@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, join_room, leave_room
@@ -20,6 +21,22 @@ class FileChangeHandler(FileSystemEventHandler):
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/start-cpp', methods=['POST'])
+def start_cpp():
+    args = ["bin/linux/debug/executable"]
+    subprocess.Popen(args, stdout=subprocess.DEVNULL)
+    return 'C++ process started'
+
+
+@app.route('/cpp-test', methods=['POST'])
+def cpp_test():
+    print(f'{80 * "*"}')
+    print('Got C++ Answer !!')
+    print(f'{80 * "*"}')
+    print(request.get_json())
+    return 'Hello from python'
 
 
 @socketio.on('join')
@@ -60,19 +77,6 @@ def on_message(data):
     print('File created and process set successfully')
 
 
-# @socketio.on('connect')
-# def on_connect():
-#     client_address = request.remote_addr
-#     print(f"Client connected from {client_address}")
-#     file_name = f"connected_socket_{client_address.replace('.', '')}.txt"
-#     with open(file_name, 'w') as f:
-#         f.write("This file is created on socket connect.\n")
-#
-#     event_handler = FileChangeHandler()
-#     observer = Observer()
-#     observer.schedule(event_handler, path=os.path.dirname(os.path.abspath(file_name)), recursive=False)
-#     observer.start()
-
-
 if __name__ == '__main__':
+    print('running...')
     socketio.run(app)
