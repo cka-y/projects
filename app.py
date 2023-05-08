@@ -22,9 +22,11 @@ app.layout = html.Div([
 @app.callback(Output('display-value', 'children'),
               [Input('dropdown', 'value')])
 def display_value(value):
-    result = subprocess.run(['make'], stdout=subprocess.PIPE)
-    output = subprocess.check_output("ls", shell=True)
-    return f'You have selected {value} - {output.decode()} - {os.name} - {result} - {os.path.exists("bin")}'
+    args = ("bin/linux/debug/executable")
+    popen = subprocess.Popen(args, stdout=subprocess.PIPE)
+    popen.wait()
+    output = popen.stdout.read()
+    return f'You have selected {value} - {output.decode()}'
 
 
 if __name__ == '__main__':
