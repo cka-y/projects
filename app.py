@@ -55,6 +55,7 @@ def on_message(data):
     observer = Observer()
     observer.schedule(event_handler, path=os.path.dirname(os.path.abspath(file_name)), recursive=False)
     observer.start()
+    socketio.emit('file_created', {'message': f'File has been created --> {file_name}'})
     print('File created and process set successfully')
 
 
