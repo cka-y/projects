@@ -1,18 +1,9 @@
-# args = ("bin/linux/debug/executable")
-# popen = subprocess.Popen(args, stdout=subprocess.PIPE)
-# popen.wait()
-# output = popen.stdout.read()
-
-
-from flask import Flask, render_template, make_response, redirect
-from flask_socketio import SocketIO, send, emit
+from flask import Flask, render_template
+from flask_socketio import SocketIO, join_room, leave_room
 
 app = Flask(__name__)
-socketio = SocketIO(app,
-                    logger=True,
-                    engineio_logger=True,
-                    cors_allowed_origins="*"
-                    )
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 
 @app.route('/')
@@ -20,10 +11,26 @@ def index():
     return render_template('index.html')
 
 
-@socketio.on("message")
-def handleMessage(data):
-    emit("new_message", data, broadcast=True)
+@socketio.on('join')
+def on_join(data):
+    room = data['room']
+    join_room(room)
+    socketio.emit('status', {'message': f'User joined room {room}'}, room=room)
 
 
-if __name__ == "__main__":
-    socketio.run(app, debug=True)
+@socketio.on('leave')
+def on_leave(data):
+    room = data['room']
+    leave_room(room)
+    socketio.emit('status', {'message': f'User left room {room}'}, room=room)
+
+
+@socketio.on('message')
+def on_message(data):
+    room = data['room']
+    message = data['message']
+    socketio.emit('message', {'message': message}, room=room)
+
+
+if __name__ == '__main__':
+    socketio.run(app, host='0.0.0.0')

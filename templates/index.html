@@ -1,12 +1,28 @@
-<div id="chat"></div>
-<input id="chat-input" type="text"> <button onclick="sendMessage()">Send Message</button>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-<script>
-	socket = io()
-	function sendMessage () {
-		socket.emit("message",document.getElementById("chat-input").value)
-	}
-	socket.on("new_message",(data)=>{
-		document.getElementById("chat").innerHTML+="<br>"+data;
-	})
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask WebSocket Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+    <script>
+        const socket = io.connect('//' + window.location.host);
+
+        socket.on('connect', () => {
+            const room = 'test_room';
+            socket.emit('join', {room: room});
+            socket.emit('message', {room: room, message: 'Hello, server!'});
+        });
+
+        socket.on('status', (data) => {
+            console.log('Status:', data.message);
+        });
+
+        socket.on('message', (data) => {
+            console.log('Received from server:', data.message);
+        });
+    </script>
+</head>
+<body>
+    <h1>Flask WebSocket Example</h1>
+</body>
+</html>
