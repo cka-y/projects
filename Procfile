@@ -1,1 +1,1 @@
-web: make && gunicorn --worker-class eventlet -w 1 app:app
+web: make && gunicorn --worker-class eventlet app:app
