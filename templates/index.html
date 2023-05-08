@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask App with Socket.IO and File Watcher</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js" integrity="sha512-2RDFiNLUte8XBg6stU8P6Uor4lK3nb3/8uf6M7s7iQ1zp0eGc/8M6RNwP7hY/6ibtT1YG8T8Tl9+9//AGCzFkw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <h1>Flask App with Socket.IO and File Watcher</h1>
+    <script>
+        const socket = io.connect("http://" + document.domain + ":" + location.port);
+        console.log(socket);
+    </script>
+</body>
+</html>
+
