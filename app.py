@@ -43,18 +43,18 @@ def on_message(data):
     socketio.emit('message', {'message': message}, room=room)
 
 
-@socketio.on('connect')
-def on_connect():
-    client_address = request.remote_addr
-    print(f"Client connected from {client_address}")
-    file_name = f"connected_socket_{client_address.replace('.', '')}.txt"
-    with open(file_name, 'w') as f:
-        f.write("This file is created on socket connect.\n")
-
-    event_handler = FileChangeHandler()
-    observer = Observer()
-    observer.schedule(event_handler, path=os.path.dirname(os.path.abspath(file_name)), recursive=False)
-    observer.start()
+# @socketio.on('connect')
+# def on_connect():
+#     client_address = request.remote_addr
+#     print(f"Client connected from {client_address}")
+#     file_name = f"connected_socket_{client_address.replace('.', '')}.txt"
+#     with open(file_name, 'w') as f:
+#         f.write("This file is created on socket connect.\n")
+#
+#     event_handler = FileChangeHandler()
+#     observer = Observer()
+#     observer.schedule(event_handler, path=os.path.dirname(os.path.abspath(file_name)), recursive=False)
+#     observer.start()
 
 
 if __name__ == '__main__':
