@@ -50,10 +50,11 @@ def on_message(data):
     file_name = f"connected_socket_{client_address.replace('.', '')}.txt"
     with open(file_name, 'w') as f:
         f.write("This file is created on socket connect.\n")
+        print("Created file successfully")
 
     event_handler = FileChangeHandler()
     observer = Observer()
-    observer.schedule(event_handler, path=os.path.dirname(os.path.abspath(file_name)), recursive=False)
+    observer.schedule(event_handler, path=file_name, recursive=False)
     observer.start()
     socketio.emit('file_created', {'message': f'File has been created --> {file_name}'})
     print('File created and process set successfully')
