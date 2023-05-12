@@ -1,14 +1,15 @@
+import base64
+import io
 import itertools
 import os
 import subprocess
-import numpy as np
+
 import matplotlib.pyplot as plt
-from matplotlib import colors
-import io
-import base64
 import numpy
-from flask import Flask, render_template, request
-from flask_socketio import SocketIO, join_room, leave_room
+import numpy as np
+from flask import Flask, request
+from flask_socketio import SocketIO, join_room
+from matplotlib import colors
 
 from generator import generate_precincts
 

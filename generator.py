@@ -9,4 +9,5 @@ def generate_precincts(precincts_x, precincts_y, filename):
     with open('./exemplaires/' + f'{filename}.txt', 'w') as f:
         f.write(str(precincts_x) + " " + str(precincts_y) + "\n")
         np.savetxt(f, np.array(precincts_map), fmt="%-3.0i")
+    return precincts_map
 
