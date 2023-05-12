@@ -25,7 +25,7 @@ def index():
 
 @app.route('/start-cpp', methods=['POST'])
 def start_cpp():
-    args = ["bin/linux/debug/executable", "-e", "exemplaires/10_20_0.txt", "-c", 4]
+    args = ["bin/linux/debug/executable", "-e", "exemplaires/10_20_0.txt", "-c", "4"]
     subprocess.Popen(args, stdout=subprocess.DEVNULL)
     return 'C++ process started'
 
