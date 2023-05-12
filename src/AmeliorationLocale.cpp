@@ -162,13 +162,27 @@ Municipalite AmeliorationLocale::trouver_meilleur_voisin(int i, int j) {
  * Methode s'occupant de l'affichage sur le terminal tel que demande
  * @param vecteur : un vecteur contenant les informations de toutes les circonscriptions
  */
-void AmeliorationLocale::afficher() {
-    for(int i = 0; i < circonscriptions.size(); i++){
-        for(auto const& municipalite: circonscriptions.at(i)->municipalites)
-            cout << municipalite.i << " " << municipalite.j << " ";
-        cout << endl;
+void AmeliorationLocale::afficher(int meilleure_solution) {
+    cout << "Better solution --> " << meilleure_solution << endl;
+    // Send solution to the backend
+    json json_data(matrice_circonscriptions);
+    std::string json_string = json_data.dump();
+    httplib::Client client(server_address);
+
+    // Set up the HTTP POST headers
+    httplib::Headers headers = {
+            {"Content-Type", "application/json"},
+            {"Content-Length", std::to_string(json_string.length())}
+    };
+    auto response = client.Post(request_path.c_str(), headers, json_string, "application/json");
+    if (!(response && response->status == 200)) {
+        std::cout << "Unable to send update to server" << std::endl;
     }
-    cout << endl;
+    auto elapsedTime = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - startTime).count();
+    if (elapsedTime > 300) {
+        std::cout << "Running time elapsed." << std::endl;
+        exit(0);
+    }
 }
 
 /**
@@ -260,10 +274,10 @@ void AmeliorationLocale::truquer_election(const int &nb_circonscriptions, const 
     
     
     int meilleure_solution = nb_circ_vertes(); // la meilleure solution est initialiser a la valeur de la solution init
+
     if(afficher_matrice)
-        afficher();
-    else
-        cout << "Init solution --> " << meilleure_solution << endl;
+        afficher(meilleure_solution);
+
     // 2. INITIALISATION DES DIFFERENTS ATTRIBUTS ET VARIABLES LOCALES
     distance_manhattan = circonscriptions.at(0)->distance_manhattan;
 
@@ -301,27 +315,7 @@ void AmeliorationLocale::truquer_election(const int &nb_circonscriptions, const 
             meilleure_solution = solution_courante;
             permuter = true;
             if(afficher_matrice)
-                afficher();
-            else {
-                cout << "Better solution --> " << meilleure_solution << endl;
-                // Send solution to the backend
-                json json_data(matrice_circonscriptions);
-                std::string json_string = json_data.dump();
-                httplib::Client client(server_address);
-
-                // Set up the HTTP POST headers
-                httplib::Headers headers = {
-                        {"Content-Type", "application/json"},
-                        {"Content-Length", std::to_string(json_string.length())}
-                };
-                auto response = client.Post(request_path.c_str(), headers, json_string, "application/json");
-                if (response && response->status == 200) {
-                    // ok
-                } else {
-                    std::cout << "Unable to send update to server" << std::endl;
-                }
-
-            }
+                afficher(meilleure_solution);
 
         } else {
             if(solution_courante == meilleure_solution)

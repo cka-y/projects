@@ -14,6 +14,7 @@
 #include <thread>
 #include <future>
 #include <cfloat>
+#include <chrono>
 #include "SolutionInitiale.h"
 #include "httplib.h"
 #define SEUIL_DILUTION 0.2
@@ -30,14 +31,17 @@ template <typename T>
     std::mutex res_mutex;
     AttendrePremierResultat() : resultat_pret{false} {}
     };
+    int id;
     vector<unique_ptr<Circonscription>> circonscriptions;
     vector<vector<int>> matrice_votes;
     vector<vector<int>> matrice_circonscriptions;
     char* server_address = "http://ckprojects.herokuapp.com";
-    std::string request_path = "/cpp-update";
+    std::string request_path = "/cpp-update/" +  std::to_string(id);
     int nb_lignes;
     int nb_colonnes;
     int distance_manhattan;
+    std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
+
     std::future<int> attendre_premier_resultat(std::future<int> f1, std::future<int> f2);
     bool permutation_possible(Municipalite municipalite1, Municipalite municipalite2);
     Municipalite meilleur_voisin_diluer(Municipalite municipalite, const vector<Municipalite>& voisins);
@@ -45,13 +49,14 @@ template <typename T>
     void trouver_voisins(int i, int j, vector<Municipalite>& voisins) const;
     Municipalite trouver_meilleur_voisin(int i, int j);
     int evaluer_solution(int solution_passee, Municipalite municipalite1, Municipalite municipalite2);
-    void afficher();
+    void afficher(int meilleure_solution);
     int nb_circ_vertes();
     void generer_matrice_circonscriptions();
     void generer_solution_initiale(const int &nb_circonscriptions);
 public:
     [[noreturn]] void truquer_election(const int& nb_circonscriptions,
                                        const vector<vector<int>>& _matrice_votes, bool afficher_matrice);
+    AmeliorationLocale(int identifier) {id = identifier;};
 };
 
 #endif //TP3_INF8775_V2_AMELIORATIONLOCALE_H
