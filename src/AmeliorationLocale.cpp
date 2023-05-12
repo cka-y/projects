@@ -167,7 +167,7 @@ void AmeliorationLocale::afficher(int meilleure_solution) {
     // Send solution to the backend
     json json_data(matrice_circonscriptions);
     std::string json_string = json_data.dump();
-    httplib::Client client(server_address);
+    httplib::Client client(server_address.c_str());
 
     // Set up the HTTP POST headers
     httplib::Headers headers = {
@@ -179,7 +179,7 @@ void AmeliorationLocale::afficher(int meilleure_solution) {
         std::cout << "Unable to send update to server" << std::endl;
     }
     auto elapsedTime = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - startTime).count();
-    if (elapsedTime > 300) {
+    if (elapsedTime > TEMPS_MAXIMAL) {
         std::cout << "Running time elapsed." << std::endl;
         exit(0);
     }

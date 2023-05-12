@@ -54,7 +54,6 @@ int main(int argc, char* argv[]) {
 
     // Verification de l'argument -c
     if (strncmp(argv[3], "-c", 2) != 0){
-        cout << argv[3] << endl;
         cout << "Argument "<< argv[3] << " inconnu.\n";
         exit(1);
     }
@@ -76,7 +75,18 @@ int main(int argc, char* argv[]) {
             cout << "Argument " << argv[6] << "inconnu.\n";
             exit(0);
         }
-        id = std::stoi(argv[7]);
+        std::string id_str = argv[7];
+        std::cout << "ID = " << id_str << endl;
+
+        // Trim leading and trailing whitespace characters
+        id_str.erase(id_str.begin(), std::find_if(id_str.begin(), id_str.end(), [](int ch) {
+            return !std::isspace(ch);
+        }));
+        id_str.erase(std::find_if(id_str.rbegin(), id_str.rend(), [](int ch) {
+            return !std::isspace(ch);
+        }).base(), id_str.end());
+
+        id = std::stoi(id_str);
     }
     AmeliorationLocale ameliorationLocale(id);
     ameliorationLocale.truquer_election(nb_circonscriptions, resultats_vote, afficher_matrice);

@@ -18,6 +18,7 @@
 #include "SolutionInitiale.h"
 #include "httplib.h"
 #define SEUIL_DILUTION 0.2
+#define TEMPS_MAXIMAL 300
 using namespace std;
 
 class AmeliorationLocale {
@@ -35,8 +36,8 @@ template <typename T>
     vector<unique_ptr<Circonscription>> circonscriptions;
     vector<vector<int>> matrice_votes;
     vector<vector<int>> matrice_circonscriptions;
-    char* server_address = "http://ckprojects.herokuapp.com";
-    std::string request_path = "/cpp-update/" +  std::to_string(id);
+    string server_address = "http://ckprojects.herokuapp.com";
+    std::string request_path;
     int nb_lignes;
     int nb_colonnes;
     int distance_manhattan;
@@ -56,7 +57,10 @@ template <typename T>
 public:
     [[noreturn]] void truquer_election(const int& nb_circonscriptions,
                                        const vector<vector<int>>& _matrice_votes, bool afficher_matrice);
-    AmeliorationLocale(int identifier) {id = identifier;};
+    AmeliorationLocale(int identifier) {
+        id = identifier;
+        request_path = "/cpp-update/" +  std::to_string(id);
+    };
 };
 
 #endif //TP3_INF8775_V2_AMELIORATIONLOCALE_H
