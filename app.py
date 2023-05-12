@@ -25,15 +25,15 @@ def index():
 
 @app.route('/start-cpp', methods=['POST'])
 def start_cpp():
-    args = ["bin/linux/debug/executable"]
+    args = ["bin/linux/debug/executable", "-e", "exemplaires/10_20_0.txt", "-c", 4]
     subprocess.Popen(args, stdout=subprocess.DEVNULL)
     return 'C++ process started'
 
 
-@app.route('/cpp-test', methods=['POST'])
+@app.route('/cpp-update', methods=['POST'])
 def cpp_test():
     print(f'{80 * "*"}')
-    print('Got C++ Answer !!')
+    print('Got C++ Update')
     print(f'{80 * "*"}')
     print(request.get_json())
     return 'Hello from python'
